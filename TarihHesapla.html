@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>Staj Tarih Hesaplama</title>
-	<link href="jquery-ui.css" rel="stylesheet">
+	<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
 	<style>
-.ui-datepicker td.ui-state-disabled>span{background:#c00;}
+.ui-datepicker td.ui-state-disabled>span{background:#c00;color:grey;}
 .ui-datepicker td.ui-state-disabled{opacity:100;}
 	</style>
 </head>
@@ -13,26 +13,36 @@
 <h2 class="demoHeaders">Başlangıç Tarihi</h2>
 <div id="bastar"></div>
 
-<script src="external/jquery/jquery.js"></script>
-<script src="jquery-ui.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
 <script>
 
 var Tatil = {};
+Tatil[new Date('01/01/2016')] = 'Yılbaşı';
 Tatil[new Date('04/23/2016')] = 'Ulusal Egemenlik ve Çocuk Bayramı';
 Tatil[new Date('05/01/2016')] = 'Emek ve Dayanışma Günü';
 Tatil[new Date('05/19/2016')] = 'Atatürk\'ü Anma Gençlik ve Spor Bayramı';
+Tatil[new Date('07/05/2016')] = 'Ramazan Bayramı';
+Tatil[new Date('07/06/2016')] = 'Ramazan Bayramı';
+Tatil[new Date('07/07/2016')] = 'Ramazan Bayramı';
+Tatil[new Date('08/30/2016')] = 'Zafer Bayramı';
+Tatil[new Date('09/12/2016')] = 'Kurban Bayramı';
+Tatil[new Date('09/13/2016')] = 'Kurban Bayramı';
+Tatil[new Date('09/14/2016')] = 'Kurban Bayramı';
+Tatil[new Date('09.15.2016')] = 'Kurban Bayramı';
+Tatil[new Date('10.29.2016')] = 'Cumhuriyet Bayramı';
 
 
 $( "#bastar" ).datepicker({
 	dateFormat: 'dd.mm.yy',
 	beforeShowDay: function(date) {
 	var Highlight = Tatil[date];
-	//var HighlighText = TatilAck[date]; 
 	if (Highlight) {
 		return [false, "", Highlight];
 	}
 	else {
+		if(date.getDay()==0) return [false,'','Pazar'];
 		return [true, '', ''];
 	}
 
