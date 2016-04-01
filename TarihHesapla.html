@@ -5,13 +5,8 @@
 	<title>Staj Tarih Hesaplama</title>
 	<link href="jquery-ui.css" rel="stylesheet">
 	<style>
-.Highlighted a{
-   background-color : Green !important;
-   background-image :none !important;
-   color: White !important;
-   font-weight:bold !important;
-   font-size: 12pt;
-}
+.ui-datepicker td.ui-state-disabled>span{background:#c00;}
+.ui-datepicker td.ui-state-disabled{opacity:100;}
 	</style>
 </head>
 <body>
@@ -20,31 +15,56 @@
 
 <script src="external/jquery/jquery.js"></script>
 <script src="jquery-ui.js"></script>
-<script>
-var TatilTar = {};
-TatilTar[new Date('04/04/2016')] = new Date('04/04/2016');
-//TatilTar[new Date('05/04/2012')] = new Date('05/04/2012');
-//TatilTar[new Date('06/06/2012')] = new Date('06/06/2012');
 
-var TatilAck = {};
-TatilAck[new Date('04/04/2016')] = 'Ulusal Egemenlik ve Çocuk Bayramı';
-//TatilAck[new Date('05/04/2012')] = 'Holiday2';
-//TatilAck[new Date('06/06/2012')] = 'Holiday3'; 
+<script>
+
+var Tatil = {};
+Tatil[new Date('04/23/2016')] = 'Ulusal Egemenlik ve Çocuk Bayramı';
+Tatil[new Date('05/01/2016')] = 'Emek ve Dayanışma Günü';
+Tatil[new Date('05/19/2016')] = 'Atatürk\'ü Anma Gençlik ve Spor Bayramı';
 
 
 $( "#bastar" ).datepicker({
+	dateFormat: 'dd.mm.yy',
 	beforeShowDay: function(date) {
-	var Highlight = TatilTar[date];
-	var HighlighText = TatilAck[date]; 
+	var Highlight = Tatil[date];
+	//var HighlighText = TatilAck[date]; 
 	if (Highlight) {
-		return [true, "Highlighted", HighlighText];
+		return [false, "", Highlight];
 	}
 	else {
 		return [true, '', ''];
 	}
-}
+
+},
+	dateFormat: "dd.mm.yy",//tarih formatı yy=yıl mm=ay dd=gün
+	firstDay:1,
+	appendText: "(yıl-ay-gün)",//inputun sonuna bu yazıyı yazar.
+	/*autoSize: true,//inputu otomatik boyutlandırır*/
+	changeMonth: true,//ayı elle seçmeyi aktif eder
+	/*changeYear: true,//yılı elee seçime izin verir*/
+	dayNames:[ "Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],//günlerin adı
+	dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],//kısaltmalar
+	defaultDate: +5,//takvim açılınca seçili olanı bu günden 10 gün sonra olsun dedik
+	/*isRTL: true//takvimi ters çevirir garip bi özellik :D*/
+	maxDate: "+1y",//ileri göre bilme zamanını 2 yıl 1 ay 2 hafta yaptık
+	minDate: "-1y",//geriyi göre bilme alanını 1 yıl 1 ay 2 hafta yaptık.bunu istediğiniz gibi ayarlaya bilirsiniz
+	monthNamesShort: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],//ay seçim alanın düzenledik
+	nextText: "ileri&gt;",//ileri butonun türkçeleştirdik
+	prevText: "&lt;geri",//buda geri butonu için
+	/*showAnim: "bounce",//takvim açılım animasyonu alta tüm animasyon isimleri yazdım */
+	/*fold-blind-bounce-clip-drop-explode-fade-highlight-puff-pulsate-scale-shake-slide-size-transfer*/
+	showOn: "both",//inputun yanına ... butonu koyuyor
+
 
 });
+
+$.datepicker.setDefaults(
+  $.extend(
+    {'dateFormat':'dd-mm-yy'},
+    $.datepicker.regional['tr']
+  )
+);
 </script>
 
 </body>
