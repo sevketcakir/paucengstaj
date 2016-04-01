@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr">
+<head>
+	<meta charset="utf-8">
+	<title>Staj Tarih Hesaplama</title>
+	<link href="jquery-ui.css" rel="stylesheet">
+	<style>
+.Highlighted a{
+   background-color : Green !important;
+   background-image :none !important;
+   color: White !important;
+   font-weight:bold !important;
+   font-size: 12pt;
+}
+	</style>
+</head>
+<body>
+<h2 class="demoHeaders">Başlangıç Tarihi</h2>
+<div id="bastar"></div>
+
+<script src="external/jquery/jquery.js"></script>
+<script src="jquery-ui.js"></script>
+<script>
+var TatilTar = {};
+TatilTar[new Date('04/04/2016')] = new Date('04/04/2016');
+//TatilTar[new Date('05/04/2012')] = new Date('05/04/2012');
+//TatilTar[new Date('06/06/2012')] = new Date('06/06/2012');
+
+var TatilAck = {};
+TatilAck[new Date('04/04/2016')] = 'Ulusal Egemenlik ve Çocuk Bayramı';
+//TatilAck[new Date('05/04/2012')] = 'Holiday2';
+//TatilAck[new Date('06/06/2012')] = 'Holiday3'; 
+
+
+$( "#bastar" ).datepicker({
+	beforeShowDay: function(date) {
+	var Highlight = TatilTar[date];
+	var HighlighText = TatilAck[date]; 
+	if (Highlight) {
+		return [true, "Highlighted", HighlighText];
+	}
+	else {
+		return [true, '', ''];
+	}
+}
+
+});
+</script>
+
+</body>
+</html>
