@@ -3,129 +3,87 @@
 <head>
 	<meta charset="utf-8">
 	<title>Staj Tarih Hesaplama</title>
-	<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/start/jquery-ui.css" rel="stylesheet">
 	<style>
 .ui-datepicker td.ui-state-disabled>span{background:#c00;color:grey;}
 .ui-datepicker td.ui-state-disabled{opacity:100;}
 	</style>
 </head>
 <body>
-<h2 class="demoHeaders">Staj Tarihleri</h2>
+<h2 class="demoHeaders">Staj Tarih Hesaplama</h2>
 <div id="container">
 	<fieldset>
-		<legend>Tatiller</legend>
+		<legend>Hesaplama</legend>
 
 		<label for="bastar">Başlangıç Tarihi</label>
 		<input type="text" id="bastar" name="bastar" value=""> <br/>
-		<label for="bittar">Bitiş Tarihi</label>
-		<input type="text" name="bittar" id="bittar" value=""> <br/>
+		<label for="gunsay">Gün sayısı</label>
+		<input type="number" name="gunsay" id="gunsay" value="30"> <br/>
 
-		<select class="" name="tatiller" id="tatiller">
+		<label for="tatiller">Tatiller</label>
+		<select class="" name="tatiller" id="tatiller" size="15">
 		</select>
+		<br/>
+		<label for="cumartesi">Cumartesi çalışıyor mu?</label>
+		<input type="checkbox" name="cumartesi" id="cumartesi" value="">
+		<br/>
+		<label for="but">Bütünlemeye girecek mi?</label>
+		<input type="checkbox" name="but" id="but" value="">
+		<br/>
+		<label for="butbas">Bütünleme başlangıç</label>
+		<input type="text" name="butbas" id="butbas" value="2017.06.05">
+		<br/>
+		<label for="butbit">Bütünleme bitiş</label>
+		<input type="text" name="butbit" id="butbit" value="2017.06.18">
+		<br/>
+		<label for="yazokulu">Yaz okuluna katılıyor mu?</label>
+		<input type="checkbox" name="yazokulu" id="yazokulu" value="">
+		<br/>
+		<label for="yobas">Yaz okulu başlangıç</label>
+		<input type="text" name="yobas" id="yobas" value="2017.06.19">
+		<br/>
+		<label for="yobit">Yaz okulu bitiş</label>
+		<input type="text" name="yobit" id="yobit" value="2017.08.18">
+		<br/>
+		<label for="donembit">Bahar dönemi bitiş tarihi</label>
+		<input type="text" name="donembit" id="donembit" value="2017.05.26">
+		<br/>
+		<label for="donembas">Güz dönemi bitiş tarihi</label>
+		<input type="text" name="donembas" id="donembas" value="2017.09.15">
+		<br/>
+		<input type="button" name="hesapla" id="hesapla" value="Hesapla" onclick="hesapla();">
 
+		<p id="bittar" name="bittar">Bitiş Tarihi: </p>
 	</fieldset>
+	<div id="StajGunleri" name="StajGunleri">
 
+	</div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script type="text/javascript" src="tarih.js">
 
+</script>
 <script>
 //TODO:aşağıdaki işlevsellik daha sonra kullanılacak...
 //var d=new Date('12.31.2016');
 //document.write(new Date(d.setDate(d.getDate()+1)));
 
-var Tatil = {};
-Tatil[new Date('01/01/2016')] = 'Yılbaşı';
-Tatil[new Date('04/23/2017')] = 'Ulusal Egemenlik ve Çocuk Bayramı';
-Tatil[new Date('05/01/2017')] = 'Emek ve Dayanışma Günü';
-Tatil[new Date('05/19/2017')] = 'Atatürk\'ü Anma Gençlik ve Spor Bayramı';
-Tatil[new Date('06/25/2017')] = 'Ramazan Bayramı';
-Tatil[new Date('06/26/2017')] = 'Ramazan Bayramı';
-Tatil[new Date('06/27/2017')] = 'Ramazan Bayramı';
-Tatil[new Date('08/30/2017')] = 'Zafer Bayramı';
-Tatil[new Date('09/01/2017')] = 'Kurban Bayramı';
-Tatil[new Date('09/02/2017')] = 'Kurban Bayramı';
-Tatil[new Date('09/03/2017')] = 'Kurban Bayramı';
-Tatil[new Date('09/04/2017')] = 'Kurban Bayramı';
-Tatil[new Date('10.29.2017')] = 'Cumhuriyet Bayramı';
+tatilGuncelle();
+datePickerEkle($( "#bastar" ),Tatil);
+datePickerEkle($( "#butbas" ),Tatil);
+datePickerEkle($( "#butbit" ),Tatil);
+datePickerEkle($( "#yobas" ),Tatil);
+datePickerEkle($( "#yobit" ),Tatil);
+datePickerEkle($( "#donembas" ),Tatil);
+datePickerEkle($( "#donembit" ),Tatil);
+//datePickerEkle($( "#bittar" ),Tatil);
 
-for (var key in Tatil) {
-	var tatiller=document.getElementById("tatiller");
-	//console.log("key " + key + " has value " + myArray[key]);
-	var option = document.createElement("option");
-	option.value = key;
-	option.text = Tatil[key];
-}
-
-$( "#bastar" ).datepicker({
-	dateFormat: 'dd.mm.yy',
-	beforeShowDay: function(date) {
-	var Highlight = Tatil[date];
-	if (Highlight) {
-		return [false, "", Highlight];
-	}
-	else {
-		if(date.getDay()==0) return [false,'','Pazar'];
-		return [true, '', ''];
-	}
-
-},
-	dateFormat: "dd.mm.yy",//tarih formatı yy=yıl mm=ay dd=gün
-	firstDay:1,
-	appendText: "(yıl-ay-gün)",//inputun sonuna bu yazıyı yazar.
-	/*autoSize: true,//inputu otomatik boyutlandırır*/
-	changeMonth: true,//ayı elle seçmeyi aktif eder
-	/*changeYear: true,//yılı elee seçime izin verir*/
-	dayNames:[ "Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],//günlerin adı
-	dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],//kısaltmalar
-	defaultDate: +5,//takvim açılınca seçili olanı bu günden 10 gün sonra olsun dedik
-	/*isRTL: true//takvimi ters çevirir garip bi özellik :D*/
-	maxDate: "+1y",//ileri göre bilme zamanını 2 yıl 1 ay 2 hafta yaptık
-	minDate: "-1y",//geriyi göre bilme alanını 1 yıl 1 ay 2 hafta yaptık.bunu istediğiniz gibi ayarlaya bilirsiniz
-	monthNamesShort: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],//ay seçim alanın düzenledik
-	nextText: "ileri&gt;",//ileri butonun türkçeleştirdik
-	prevText: "&lt;geri",//buda geri butonu için
-	/*showAnim: "bounce",//takvim açılım animasyonu alta tüm animasyon isimleri yazdım */
-	/*fold-blind-bounce-clip-drop-explode-fade-highlight-puff-pulsate-scale-shake-slide-size-transfer*/
-	showOn: "both",//inputun yanına ... butonu koyuyor
-});
-$( "#bittar" ).datepicker({
-	dateFormat: 'dd.mm.yy',
-	beforeShowDay: function(date) {
-	var Highlight = Tatil[date];
-	if (Highlight) {
-		return [false, "", Highlight];
-	}
-	else {
-		if(date.getDay()==0) return [false,'','Pazar'];
-		return [true, '', ''];
-	}
-
-},
-	dateFormat: "dd.mm.yy",//tarih formatı yy=yıl mm=ay dd=gün
-	firstDay:1,
-	appendText: "(yıl-ay-gün)",//inputun sonuna bu yazıyı yazar.
-	/*autoSize: true,//inputu otomatik boyutlandırır*/
-	changeMonth: true,//ayı elle seçmeyi aktif eder
-	/*changeYear: true,//yılı elee seçime izin verir*/
-	dayNames:[ "Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],//günlerin adı
-	dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],//kısaltmalar
-	defaultDate: +5,//takvim açılınca seçili olanı bu günden 10 gün sonra olsun dedik
-	/*isRTL: true//takvimi ters çevirir garip bi özellik :D*/
-	maxDate: "+1y",//ileri göre bilme zamanını 2 yıl 1 ay 2 hafta yaptık
-	minDate: "-1y",//geriyi göre bilme alanını 1 yıl 1 ay 2 hafta yaptık.bunu istediğiniz gibi ayarlaya bilirsiniz
-	monthNamesShort: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],//ay seçim alanın düzenledik
-	nextText: "ileri&gt;",//ileri butonun türkçeleştirdik
-	prevText: "&lt;geri",//buda geri butonu için
-	/*showAnim: "bounce",//takvim açılım animasyonu alta tüm animasyon isimleri yazdım */
-	/*fold-blind-bounce-clip-drop-explode-fade-highlight-puff-pulsate-scale-shake-slide-size-transfer*/
-	showOn: "both",//inputun yanına ... butonu koyuyor
-});
 
 $.datepicker.setDefaults(
   $.extend(
-    {'dateFormat':'dd-mm-yy'},
+    {'dateFormat':'yy.mm.dd'},
     $.datepicker.regional['tr']
   )
 );
